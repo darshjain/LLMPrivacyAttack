@@ -1,5 +1,5 @@
-from datasets.data_loader import load_and_prepare_dataset
-from tokenizer.tokenizer import load_tokenizer
+from data.data_loader import load_and_prepare_dataset
+from data_tokenizer.data_tokenizer import load_tokenizer
 from models.models import load_model, move_to_device
 from attack.inference import run_inference
 from attack.attack import simulate_privacy_attack

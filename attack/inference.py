@@ -1,5 +1,5 @@
 import torch
-from tokenizer_handler import tokenize_texts
+from data_tokenizer.data_tokenizer import tokenize_texts
 from config import BATCH_SIZE
 
 def run_inference(model, tokenizer, texts, device):
