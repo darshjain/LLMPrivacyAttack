@@ -1,39 +1,24 @@
+# agents/base_agent.py
 from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import ClassVar
-from pydantic import BaseModel, Field
+from langchain.llms.base import BaseLLM
+import sys
+import os
 
+# Add parent directory to path to import models
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from models import load_model, move_to_device
 
-class RequireNameMeta(type(ABC)):
-    def __init__(cls, name, bases, dct):
-        super().__init__(name, bases, dct)
-
-        if name != "BaseAgent" and not hasattr(cls, "NAME"):
-            raise TypeError(f"Class {name} must define a class property 'NAME'.")
-
-
-class AgentResult(BaseModel):
-    total_input_tokens: int = Field(
-        description="The total number of input tokens used by the agent to "
-        "complete the task."
-    )
-    total_output_tokens: int = Field(
-        description="The total number of output tokens used by the agent to "
-        "complete the task."
-    )
-
-
-class BaseAgent(ABC, metaclass=RequireNameMeta):
-    NAME: ClassVar[AgentName]
-
-    def __init__(self, **kwargs):
-        super().__init__()
-
+class BaseAgent(ABC):
+    """Base agent class that all other agents will inherit from."""
+    
+    def __init__(self, model=None):
+        """Initialize with either a provided model or load the default one."""
+        if model is None:
+            self.model, self.device = move_to_device(load_model())
+        else:
+            self.model, self.device = move_to_device(model)
+    
     @abstractmethod
-    def perform_task(
-        self,
-        task_description: str,
-        session: TmuxSession,
-        logging_dir: Path | None = None,
-    ) -> AgentResult:
-        raise NotImplementedError("Agents must implement this method.")
+    def run(self, input_text):
+        """Run the agent on the provided input."""
+        pass
