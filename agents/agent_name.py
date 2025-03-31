@@ -1,6 +1,7 @@
 from enum import Enum
 
-
 class AgentName(Enum):
-    LANGCHAIN = "langchain"
-    NAIVE = "naive"
+    QA = "qa"           # Question-answering agent
+    CHAT = "chat"       # Conversational chat agent
+    TOOL = "tool"       # Tool-using agent
+    NAIVE = "naive"     
